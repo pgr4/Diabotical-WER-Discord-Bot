@@ -25,17 +25,17 @@ def try_remove_player_id(author):
             if line.startswith(get_username(author)) == True:
                 ret = True
             else:
-                f.write(line)
+                f.writelines(line)
                 
     return ret
                 
                 
 
 def try_add_player(author, id):
-    if try_get_player_id(id) is not None:
+    if try_get_player_id(author) is not None:
         return False
     
     with open(file_name, 'a') as f:
-        f.write(get_line_output(author, id))
+        f.writelines(get_line_output(author, id))
         
     return True

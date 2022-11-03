@@ -27,3 +27,7 @@ def get_recent_game(player_id):
     response1 = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')
     response2 = makeGetRequest(f'https://diabotical.cool/api/v1/match/{response1.matches.matches[0].match_id}')
     return Match(response2.match)
+
+def get_recent_game_diaboticool_url(player_id):
+    response = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')
+    return f'https://diabotical.cool/match/{response.matches.matches[0].match_id}'

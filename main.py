@@ -5,7 +5,7 @@ from io import StringIO
 import discord
 from dotenv import load_dotenv
 from discord.ext import commands
-from enesy import get_current_games, get_recent_game
+from enesy import get_current_games, get_recent_game, get_recent_game_diaboticool_url
 from player_db import try_get_player_id, try_remove_player_id, try_add_player
 
 load_dotenv()
@@ -78,6 +78,15 @@ async def on_get_games(command):
     
     current_games_response = get_current_games(player_id)
     # TODO
+
+@bot.command(name='cool')
+async def on_get_cool(command):
+    player_id = try_get_player_id(command.author)
+    if player_id is None:
+        await command.channel.send(f'Not Registered')
+        return
+    
+    await command.channel.send(f'<{get_recent_game_diaboticool_url(player_id)}>')
 
 @bot.command(name='unregister')
 async def on_unregister(command):
