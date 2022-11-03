@@ -6,6 +6,7 @@ import discord
 from dotenv import load_dotenv
 from discord.ext import commands
 from enesy import get_current_games, get_recent_game
+from player_db import try_get_player_id, try_remove_player_id, try_add_player
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -13,30 +14,6 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!',intents=intents)
-
-def get_username(author):
-    return f'{author.name}#{author.discriminator}'
-
-def try_get_player_id(author):
-    for line in open('players.csv', 'r').readlines():
-        split_lines = line.split(',')
-        
-        if split_lines[0] == get_username(author):
-            return split_lines[1]
-        
-    return None
-        
-def try_remove_player_id(author):
-    return False
-
-def try_add_player(author, id):
-    if try_get_player_id(id) is None:
-        return False
-    
-    f = open('players.csv', 'a')
-    f.write(f'{get_username(author)},{id}')
-    f.close()
-    return True
 
 @bot.event
 async def on_ready():
