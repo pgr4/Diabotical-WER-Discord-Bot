@@ -1,0 +1,2 @@
+# Diabotical WER Discord Bot
+ 
