@@ -1,7 +1,6 @@
 import requests
 import json
 from types import SimpleNamespace
-from models import Match
 
 match_mode = 'wipeout'
 
@@ -19,14 +18,14 @@ def get_current_games():
     response = makeGetRequest(f'https://diabotical.cool/api/v1/servers/')
     return response.data.data.customs
 
-# def get_elo(player_id):
-#     response = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')
-#     pass
+def get_rank_response(player_id):
+    response = makeGetRequest(f'https://api.diabotical.com/api/v0/diabotical/users/{player_id}/rating')
+    return response
 
-def get_recent_game(player_id):
+def get_recent_game_response(player_id):
     response1 = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')
     response2 = makeGetRequest(f'https://diabotical.cool/api/v1/match/{response1.matches.matches[0].match_id}')
-    return Match(response2.match)
+    return response2.match
 
 def get_recent_game_diaboticool_url(player_id):
     response = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')

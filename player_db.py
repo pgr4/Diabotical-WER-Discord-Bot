@@ -11,7 +11,7 @@ def try_get_player_id(author):
         split_lines = line.split(',')
         
         if split_lines[0] == get_username(author):
-            return split_lines[1]
+            return split_lines[1].replace('\n', '')
         
     return None
         
@@ -28,8 +28,6 @@ def try_remove_player_id(author):
                 f.writelines(line)
                 
     return ret
-                
-                
 
 def try_add_player(author, id):
     if try_get_player_id(author) is not None:
