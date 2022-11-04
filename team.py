@@ -1,4 +1,7 @@
 from player import Player
+from rank import Rank
+from player_rank_data import PlayerRankData
+from enesy import get_rank_response
 
 class Team:
     
@@ -17,6 +20,29 @@ class Team:
     @property
     def worst_player(self):
         return self.players[len(self.players) - 1]
+
+    def get_player_rank_data(self):
+        ret = []
+        
+        wer_total = 0
+        mmr_total = 0
+        
+        player_ranks = []
+        
+        # Make get_rank calls for each player
+        for player in self.players:
+            rank = Rank(get_rank_response(player.player_id))
+            
+            wer_total = wer_total + player.wer
+            mmr_total = mmr_total + rank.mmr
+            
+            player_ranks.append(rank)
+        
+        for index, player in enumerate(self.players):
+            rank = player_ranks[index]
+            ret.append(PlayerRankData(player, rank, mmr_total, wer_total))
+        
+        return list(ret)
 
     def get_output(self):
         return  f"""
