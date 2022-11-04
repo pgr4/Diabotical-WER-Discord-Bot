@@ -14,6 +14,7 @@ TOKEN = os.getenv('DISCORD_TOKEN')
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='!',intents=intents)
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():
@@ -110,4 +111,23 @@ async def on_unregister(command):
     else:
         await command.channel.send('Failed to Register')
 
+@bot.command(name='help')
+async def on_get_help(command):
+    player_id = try_get_player_id(command.author)
+    if player_id is None:
+        await command.channel.send(f'Not Registered')
+        return
+    
+    await command.channel.send(f"""`-----------------------------o_HOTHEAD_o's Diabotical Help Menu-----------------------------
+!blame         - Displays the stats of the 'packetdog' on your team last match
+!carry          - Displays the stats of the player that carried your team last match
+!cool           - Gets the Diabotical.cool link to your last match
+!games          - [WIP] Displays the status of all the current games
+!gamestats      - Displays all player stats from your last match
+!help           - You know what this does
+!mystats        - Displays full stats from your last match
+!register xxxxx - Register using your player id (Can obtain through Diabotical.cool site) 
+!unregister     - Can remove self to re-add or whatever
+!wer            - Displays your WER score of the last match`""")
+    
 bot.run(TOKEN)
