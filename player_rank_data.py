@@ -9,6 +9,10 @@ class PlayerRankData:
         return self.player.player_id
     
     @property
+    def player_name(self):
+        return self.player.name
+    
+    @property
     def wer(self):
         return self.player.wer
     
@@ -21,7 +25,7 @@ class PlayerRankData:
         return self.wer - self.expected_wer 
     
     def get_output(self):
-        return f"""`MMR \t{int(self.mmr)}
+        return f"""MMR \t{int(self.mmr)}
 WER \t{'%0.2f' % (self.wer)}
-WERe\t{'%0.2f' % (self.expected_wer)}`"""
+WERe\t{'%0.2f' % (self.expected_wer)}"""
         

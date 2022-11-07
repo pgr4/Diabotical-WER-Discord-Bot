@@ -43,6 +43,14 @@ class Team:
             ret.append(PlayerRankData(player, rank, mmr_total, wer_total))
         
         return list(ret)
+    
+    def get_player_wer_adjusted_output(self):
+        ret = ''
+        player_rank_data = self.get_player_rank_data()
+        player_rank_data.sort(key=lambda t: t.mmr, reverse=True)
+        for player_rank_data in player_rank_data:
+            ret = ret + '%-20s %-10s %-10s %-10s\n' % (player_rank_data.player_name, int(player_rank_data.mmr), '%0.2f' % (player_rank_data.expected_wer), '%0.2f' % (player_rank_data.wer))
+        return ret
 
     def get_output(self):
         return  f"""

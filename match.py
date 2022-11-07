@@ -36,7 +36,7 @@ class Match:
         else:
             leading_str = 'Look what I have to deal with...'
 
-        return f"""`{leading_str}`
+        return f"""{leading_str}
 {worst_player.get_full_output()}"""
 
     def get_best_player_output(self, player_id):
@@ -52,7 +52,7 @@ class Match:
         else:
             leading_str = 'Thanks for the carry...'
 
-        return f"""`{leading_str}`
+        return f"""{leading_str}
 {best_player.get_full_output()}"""
 
     def get_best_player_adjusted_output(self, player_id):
@@ -67,7 +67,7 @@ class Match:
         else:
             leading_str = 'Thanks for the carry*...'
 
-        return f"""`{leading_str}`
+        return f"""{leading_str}
 {player_rank_data.get_output()}
 {player_rank_data.player.get_full_output()}"""
 
@@ -83,7 +83,7 @@ class Match:
         else:
             leading_str = 'Look what I have to deal with*...'
 
-        return f"""`{leading_str}`
+        return f"""{leading_str}
 {player_rank_data.get_output()}
 {player_rank_data.player.get_full_output()}"""
 
@@ -101,7 +101,7 @@ class Match:
         if player == None:
             return None
         
-        return f'`Check out my WER Score: {"%0.2f" % (player.wer)} - thanks enesy`'
+        return f'Check out my WER Score: {"%0.2f" % (player.wer)} - thanks enesy'
 
     def get_player_wer_adjusted_output(self, player_id):
         team = self.get_team_for_player(player_id)
@@ -111,12 +111,19 @@ class Match:
         
         player_rank_data = list(filter(lambda t: t.player_id == player_id, team.get_player_rank_data()))[0]
         
-        return f'`Check out my WERe Score: {"%0.2f" % (player_rank_data.expected_wer)} WER: {"%0.2f" % (player_rank_data.wer)} MMR: {int(player_rank_data.mmr)} - thanks enesy`'
+        return f'Check out my WERe Score: {"%0.2f" % (player_rank_data.expected_wer)} WER: {"%0.2f" % (player_rank_data.wer)} MMR: {int(player_rank_data.mmr)} - thanks enesy'
+
+    def get_all_players_wer_adjusted_output(self):
+        return f"""{'%-20s %-10s %-10s %-10s' % ('', 'MMR', 'WERe', 'WER')}
+Team 1:
+{self.team_1.get_player_wer_adjusted_output()}
+Team 2:
+{self.team_2.get_player_wer_adjusted_output()}"""
 
     def get_output(self):
         return  f"""
-`Team 1`
+Team 1
     {self.team_1.get_output()}
     
-`Team 2`
+Team 2
     {self.team_2.get_output()}"""

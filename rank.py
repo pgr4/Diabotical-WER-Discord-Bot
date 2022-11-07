@@ -139,7 +139,7 @@ class Rank:
             return 'Explorer I'
         
     def get_output(self):
-        return f'`{self.rank_string} ({int(self.mmr)})`'
+        return f'{self.rank_string} ({int(self.mmr)})'
     
     
 # ELO     SCORE   EXPECTED_SCORE     

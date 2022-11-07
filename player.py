@@ -97,14 +97,14 @@ class Player:
         return '%-10s %-10s %-10s %s' % (self.frags, self.damage_given, "%0.2f" % (self.dps), self.accuracy)
 
     def get_output(self):
-        return  f"""`{self.name}
+        return  f"""{self.name}
 Rocket:   {self.rocket.get_output()}
 LG:       {self.lg.get_output()}
 Rail:     {self.rail.get_output()}
-Total:    {self.get_total_output()}`"""  
+Total:    {self.get_total_output()}"""  
 
     def get_full_output(self):
-        return  f"""`{self.name}
+        return  f"""{self.name}
 {'%-10s %-10s %-10s %-10s %s' % ('', 'Frags', 'Damage', 'DPS', 'Accuracy')}
 Melee:    {self.melee.get_output()}
 MG:       {self.mg.get_output()}
@@ -115,4 +115,4 @@ LG:       {self.lg.get_output()}
 Rail:     {self.rail.get_output()}
 Grenade:  {self.grenade.get_output()}
 Void:     {self.void.get_output()}
-Total:    {self.get_total_output()}`"""
+Total:    {self.get_total_output()}"""
