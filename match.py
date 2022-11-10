@@ -43,8 +43,8 @@ class Match:
             leading_str = 'Thanks for the carry...'
 
         return f"""{leading_str}
-{player_rank_data.get_output()}
-{player_rank_data.player.get_full_output()}"""
+
+{player_rank_data.get_full_output()}"""
 
     def get_worst_player_adjusted_output(self, player_id) -> str:
         players_team = self.get_team_for_player(player_id)
@@ -59,8 +59,8 @@ class Match:
             leading_str = 'Look what I have to deal with...'
 
         return f"""{leading_str}
-{player_rank_data.get_output()}
-{player_rank_data.player.get_full_output()}"""
+    
+{player_rank_data.get_full_output()}"""
 
     def get_all_players_wer_adjusted_output(self) -> str:
         return f"""{'%-20s %-10s %-10s %-10s %-10s' % ('', 'MMR', 'WERe', 'WER', '+/-')}
@@ -71,17 +71,23 @@ Team 2:
 
     def get_match_summary_output(self) -> str:
          return  f"""
-{'%-30s %-10s %s' % ('Time', 'Map', 'Length')}
-{'%-30s %-10s %s' % (self.create_ts, self.match_map, self.match_time_str)}
+{'%-30s %-30s %-30s' % ('Time', 'Map', 'Length')}
+{'%-30s %-30s %-30s' % (self.create_ts, self.match_map, self.match_time_str)}
      
 {'%-10s %-10s %-10s %-10s %s' % ('', 'Score', 'Damage', 'Heal', 'Result')}
 {self.team_1.get_summary_output()}
 {self.team_2.get_summary_output()}
 
-{'%-20s|%-5s|%-6s|%-5s|%-4s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s' % ('Team 1', 'Score', 'Damage', 'WER', 'Heal', 'M', '%', 'MG', '%', 'Plas', '%', 'SG', '%', 'Rock', '%', 'LG', '%', 'Rail', '%', 'Void', '%')}
+{'%-20s|%-5s|%-6s|%-5s|%-5s|%-4s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s' % ('Team 1', 'Score', 'Damage', '+/-', 'WER', 'Heal', 'M', '%', 'MG', '%', 'Plas', '%', 'SG', '%', 'Rock', '%', 'LG', '%', 'Rail', '%', 'Void', '%')}
 {self.team_1.get_player_summary_output()}
 
-{'%-20s|%-5s|%-6s|%-5s|%-4s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s' % ('Team 2', 'Score', 'Damage', 'WER', 'Heal', 'M', '%', 'MG', '%', 'Plas', '%', 'SG', '%', 'Rock', '%', 'LG', '%', 'Rail', '%', 'Void', '%')}
+{'%-20s|%-5s|%-6s|%-5s|%-5s|%-4s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s|%-4s|%-3s' % ('Team 2', 'Score', 'Damage', '+/-', 'WER', 'Heal', 'M', '%', 'MG', '%', 'Plas', '%', 'SG', '%', 'Rock', '%', 'LG', '%', 'Rail', '%', 'Void', '%')}
 {self.team_2.get_player_summary_output()}
 """
     
+    def get_match_detail_for_player(self, player_id) -> str:
+        players_team = self.get_team_for_player(player_id)
+        
+        player_rank_data: PlayerRankData = next(filter(lambda t: t.player_id == player_id, players_team.get_player_rank_data()))
+        
+        return player_rank_data.get_full_output()

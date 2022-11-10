@@ -1,5 +1,4 @@
 from weapon import Weapon
-
 class Player:
     
     def __init__(self, client):
@@ -26,33 +25,20 @@ class Player:
         # Time Played
         self.time_played = int(client.time_played)
         
-        # Melee i==0
-        self.melee = Weapon((list(filter(lambda t: t.i == 0, client.stats.w)) or [None])[0], self.time_played)
-        # MG i==1
-        self.mg = Weapon((list(filter(lambda t: t.i == 1, client.stats.w)) or [None])[0], self.time_played)
-        # Plasma i==2
-        self.plasma = Weapon((list(filter(lambda t: t.i == 2, client.stats.w)) or [None])[0], self.time_played)
-        # Shotgun i==3
-        self.shotgun = Weapon((list(filter(lambda t: t.i == 3, client.stats.w)) or [None])[0], self.time_played)
-        # Rocket i==4
-        self.rocket = Weapon((list(filter(lambda t: t.i == 4, client.stats.w)) or [None])[0], self.time_played)
-        # LG i==5
-        self.lg = Weapon((list(filter(lambda t: t.i == 5, client.stats.w)) or [None])[0], self.time_played)
-        # Rail i==7
-        self.rail = Weapon((list(filter(lambda t: t.i == 7, client.stats.w)) or [None])[0], self.time_played)
-        # Grenade i==8
-        self.grenade = Weapon((list(filter(lambda t: t.i == 8, client.stats.w)) or [None])[0], self.time_played)
-        # Void i==19
-        self.void = Weapon((list(filter(lambda t: t.i == 19, client.stats.w)) or [None])[0], self.time_played)
+        self.melee = Weapon((list(filter(lambda t: t.i == 0, client.stats.w)) or [None])[0], self.time_played, Weapon.MELEE)
+        self.mg = Weapon((list(filter(lambda t: t.i == 1, client.stats.w)) or [None])[0], self.time_played, Weapon.MG)
+        self.plasma = Weapon((list(filter(lambda t: t.i == 2, client.stats.w)) or [None])[0], self.time_played, Weapon.PLASMA)
+        self.shotgun = Weapon((list(filter(lambda t: t.i == 3, client.stats.w)) or [None])[0], self.time_played, Weapon.SG)
+        self.rocket = Weapon((list(filter(lambda t: t.i == 4, client.stats.w)) or [None])[0], self.time_played, Weapon.ROCKET)
+        self.lg = Weapon((list(filter(lambda t: t.i == 5, client.stats.w)) or [None])[0], self.time_played, Weapon.LG)
+        self.rail = Weapon((list(filter(lambda t: t.i == 7, client.stats.w)) or [None])[0], self.time_played, Weapon.RAIL)
+        self.grenade = Weapon((list(filter(lambda t: t.i == 8, client.stats.w)) or [None])[0], self.time_played, Weapon.GRENADE)
+        self.void = Weapon((list(filter(lambda t: t.i == 19, client.stats.w)) or [None])[0], self.time_played, Weapon.VOID)
         
-        # Grav Ball i==13
-        self.grav_ball =  Weapon((list(filter(lambda t: t.i == 13, client.stats.w)) or [None])[0], self.time_played)
-        # Slow Ball i==14
-        self.slow_ball =  Weapon((list(filter(lambda t: t.i == 14, client.stats.w)) or [None])[0], self.time_played)
-        # Knock Ball i==15
-        self.knock_ball =  Weapon((list(filter(lambda t: t.i == 15, client.stats.w)) or [None])[0], self.time_played)
-        # Smoke Ball i==16
-        self.smoke_ball =  Weapon((list(filter(lambda t: t.i == 16, client.stats.w)) or [None])[0], self.time_played)
+        self.grav_ball =  Weapon((list(filter(lambda t: t.i == 13, client.stats.w)) or [None])[0], self.time_played, Weapon.GRAV_BALL)
+        self.slow_ball =  Weapon((list(filter(lambda t: t.i == 14, client.stats.w)) or [None])[0], self.time_played, Weapon.SLOW_BALL)
+        self.knock_ball =  Weapon((list(filter(lambda t: t.i == 15, client.stats.w)) or [None])[0], self.time_played, Weapon.KNOCK_BALL)
+        self.smoke_ball =  Weapon((list(filter(lambda t: t.i == 16, client.stats.w)) or [None])[0], self.time_played, Weapon.SMOKE_BALL)
     
     @property
     def all_weapons(self) -> list[Weapon]:
@@ -86,6 +72,13 @@ class Player:
         return self.damage_given - self.damage_taken   
     
     @property
+    def damage_difference_str(self) -> str:
+        if self.damage_difference <= 0:
+            return self.damage_difference
+        else:
+            return f'+{self.damage_difference}'   
+    
+    @property
     def total_heal(self) -> int:
         return self.heal_self + self.heal_team
     
@@ -100,30 +93,28 @@ class Player:
     # Output Methods 
 
     def get_total_output(self) -> str:
-        return '%-10s %-10s %-10s %s' % (self.frags, self.damage_given, "%0.2f" % (self.dps), self.accuracy)
-
-    def get_output(self) -> str:
-        return  f"""{self.name}
-Rocket:   {self.rocket.get_output()}
-LG:       {self.lg.get_output()}
-Rail:     {self.rail.get_output()}
-Total:    {self.get_total_output()}"""  
+        return 
 
     def get_full_output(self) -> str:
-        return  f"""{self.name}
-{'%-10s %-10s %-10s %-10s %s' % ('', 'Frags', 'Damage', 'DPS', 'Accuracy')}
-Melee:    {self.melee.get_output()}
-MG:       {self.mg.get_output()}
-Plasma:   {self.plasma.get_output()}
-Shotgun:  {self.shotgun.get_output()}
-Rocket:   {self.rocket.get_output()}
-LG:       {self.lg.get_output()}
-Rail:     {self.rail.get_output()}
-Grenade:  {self.grenade.get_output()}
-Void:     {self.void.get_output()}
-Total:    {self.get_total_output()}"""
+        return f"""{self.name}
+
+{self.get_weapon_output()}"""
+
+    def get_weapon_output(self) -> str:
+        return  f"""{'%-20s %-10s %-10s %-10s %-10s %-10s' % ('', 'Frags', 'Damage', '+/-', 'DPS', 'Accuracy')}
+{self.melee.get_output()}
+{self.mg.get_output()}
+{self.plasma.get_output()}
+{self.shotgun.get_output()}
+{self.rocket.get_output()}
+{self.lg.get_output()}
+{self.rail.get_output()}
+{self.void.get_output()}
+{self.grenade.get_output()}
+{'%-20s_%-10s_%-10s_%-10s_%-10s_%-10s' % ('____________________', '__________', '__________', '__________', '__________', '__________')}
+{'%-20s %-10s %-10s %-10s %-10s %-10s' % ('Total:', self.frags, self.damage_given, self.damage_difference_str, "%0.2f" % (self.dps), self.accuracy)}"""
 
     def get_summary_output(self) -> str:
-        return '%-20s|%-5s|%-6s|%-5s|%-4s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s' % (self.name, self.frags, self.damage_given, '%0.2f' % (self.wer), self.total_heal, self.melee.get_summary_output(), self.mg.get_summary_output(), self.plasma.get_summary_output(), self.shotgun.get_summary_output(), self.rocket.get_summary_output(), self.lg.get_summary_output(), self.rail.get_summary_output(), self.void.get_summary_output())
+        return '%-20s|%-5s|%-6s|%-5s|%-5s|%-4s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s|%-8s' % (self.name, self.frags, self.damage_given, self.damage_difference_str, '%0.2f' % (self.wer), self.total_heal, self.melee.get_summary_output(), self.mg.get_summary_output(), self.plasma.get_summary_output(), self.shotgun.get_summary_output(), self.rocket.get_summary_output(), self.lg.get_summary_output(), self.rail.get_summary_output(), self.void.get_summary_output())
         
         

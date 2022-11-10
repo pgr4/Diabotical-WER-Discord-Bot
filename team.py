@@ -73,22 +73,11 @@ class Team:
             ret = ret + '%-20s %-10s %-10s %-10s %-10s\n' % (player_rank_data.player_name, int(player_rank_data.mmr), '%0.2f' % (player_rank_data.expected_wer), '%0.2f' % (player_rank_data.wer), player_rank_data.difference_factor_formatted)
         return ret
 
-    def get_output(self) -> str:
-        return  f"""
-{self.players[0].get_output()}
-    
-{self.players[1].get_output()}
-
-{self.players[2].get_output()}
-
-{self.players[3].get_output()}
-"""
-
     def get_summary_output(self) -> str:
         return f"{'%-10s %-10s %-10s %-10s %s' % (self.name, self.score, self.damage_given, self.total_heal, self.result_str)}"
     
     def get_player_summary_output(self) -> str:
-        return f"""====================╪=====╪======╪=====╪====╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===
+        return f"""====================╪=====╪======╪=====╪=====╪====╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===╪====╪===
 {self.players[0].get_summary_output()}
 {self.players[1].get_summary_output()}
 {self.players[2].get_summary_output()}

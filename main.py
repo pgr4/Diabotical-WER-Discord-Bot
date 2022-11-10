@@ -31,16 +31,24 @@ async def on_get_wer(command):
     await send_in_codeblock(command, recent_game_response.get_all_players_wer_adjusted_output())
 
 @bot.command(name='match')
-async def on_get_gamestats(command):
+async def on_get_match(command):
     player_id = try_get_player_id(command.author)
     if player_id is None:
         await send_in_codeblock(command, f'Not Registered')
         return 
     
-    # TODO: USE ARGS TO GET PLAYER TO SHOW INDIVIDUAL
-    
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
     await send_in_codeblock(command, recent_game_response.get_match_summary_output())
+
+@bot.command(name='mymatch')
+async def on_get_mymatch(command):
+    player_id = try_get_player_id(command.author)
+    if player_id is None:
+        await send_in_codeblock(command, f'Not Registered')
+        return 
+    
+    recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    await send_in_codeblock(command, recent_game_response.get_match_detail_for_player(player_id))
 
 @bot.command(name='carry')
 async def on_get_carry(command):
@@ -109,7 +117,8 @@ async def on_get_help(command):
 !carry          - Displays the stats of the player that carried
 !cool           - Gets the Diabotical.cool link
 !help           - You know what this does
-!match          - Displays full stats
+!match          - Displays summary stats
+!mymatch        - Displays your full stats of match
 !register       - Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
 !unregister     - Can remove self to re-add or whatever
 !wer            - Displays the rankings and relative scores""")

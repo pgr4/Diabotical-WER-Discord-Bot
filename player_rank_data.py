@@ -36,7 +36,12 @@ class PlayerRankData:
             return '+%0.2f' % (self.difference_factor)
     
     def get_output(self) -> str:
-        return f"""MMR \t{int(self.mmr)}
-WER \t{'%0.2f' % (self.wer)}
-WERe\t{'%0.2f' % (self.expected_wer)}"""
+        return f"""{'%-20s %-10s' % ('MMR:', int(self.mmr))}
+{'%-20s %-10s' % ('WER:', '%0.2f' % self.wer)}
+{'%-20s %-10s' % ('WERe:', '%0.2f' % self.expected_wer)}"""
+
+    def get_full_output(self) -> str:
+        return f"""{self.player.get_full_output()}
+    
+{self.get_output()}"""
         
