@@ -1,12 +1,12 @@
 file_name = 'players.csv'
 
-def get_line_output(author, id):
+def get_line_output(author, id) -> str:
     return f'{get_username(author)},{id}'
 
-def get_username(author):
+def get_username(author) -> str:
     return f'{author.name}#{author.discriminator}'
 
-def try_get_player_id(author):
+def try_get_player_id(author) -> str:
     for line in open(file_name, 'r').readlines():
         split_lines = line.split(',')
         
@@ -15,7 +15,7 @@ def try_get_player_id(author):
         
     return None
         
-def try_remove_player_id(author):
+def try_remove_player_id(author) -> bool:
     ret = False
     
     with open(file_name, 'r') as f:
@@ -29,7 +29,7 @@ def try_remove_player_id(author):
                 
     return ret
 
-def try_add_player(author, id):
+def try_add_player(author, id) -> bool:
     if try_get_player_id(author) is not None:
         return False
     

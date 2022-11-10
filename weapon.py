@@ -1,6 +1,6 @@
 class Weapon:
     
-    def __init__(self, weapon_stat, time_played):
+    def __init__(self, weapon_stat: any, time_played: int):
         # Is used
         self.is_used = weapon_stat is not None
         # Time Played
@@ -8,34 +8,41 @@ class Weapon:
         
         if self.is_used:
             # Is WeeBall
-            self.is_weeball = weapon_stat.i == 13 or weapon_stat.i == 14 or weapon_stat.i == 15 or weapon_stat.i == 16
+            self.is_weeball: bool = (weapon_stat.i == 13 or weapon_stat.i == 14 or weapon_stat.i == 15 or weapon_stat.i == 16)
             # Damage
-            self.damage = weapon_stat.di
+            self.damage = int(weapon_stat.di)
             # Damage Taken
-            self.damage_taken = weapon_stat.dt
+            self.damage_taken = int(weapon_stat.dt)
             # Kills
-            self.frags = weapon_stat.f
+            self.frags = int(weapon_stat.f)
             # ID
-            self.id = weapon_stat.i
+            self.id = int(weapon_stat.i)
             # Shots Fired
-            self.shots_fired = weapon_stat.sf
+            self.shots_fired = int(weapon_stat.sf)
             # Shots Hit
-            self.shots_hit = weapon_stat.sh 
+            self.shots_hit = int(weapon_stat.sh) 
     
     @property
-    def accuracy(self):
+    def accuracy(self) -> int:
         if self.shots_fired == 0:
             return 0
         else:
             return round(100 * (self.shots_hit / self.shots_fired))
      
     @property
-    def dps(self):
+    def dps(self) -> float:
         return self.damage / self.time_played
     
-    def get_output(self):
+    # Output Methods
+    
+    def get_output(self) -> str:
         if self.is_used:
             return '%-10s %-10s %-10s %s' % (self.frags, self.damage, "%0.2f" % (self.dps), self.accuracy)
         else:
             return '%-10s %-10s %-10s %s' % ('----------', '----------', '----------', '----------')
 
+    def get_summary_output(self) -> str:
+        if self.is_used:
+            return '%-4s|%-3s' % (self.damage, self.accuracy)
+        else:
+            return '%-4s|%-3s' % ('', '')
