@@ -44,10 +44,14 @@ class Rank:
     
     
     def __init__(self, rank_response):
-        self.rank_tier = rank_response.ratings[0].rank_tier
-        self.match_count = rank_response.ratings[0].match_count
-        self.mmr_key = rank_response.ratings[0].mmr_key
-        self.mode_key = rank_response.ratings[0].mode_key
+        if len(rank_response.ratings) == 0:
+            self.rank_tier = 15 # arbitrary
+        else:
+            self.rank_tier = rank_response.ratings[0].rank_tier
+        # self.match_count = rank_response.ratings[0].match_count
+        # self.mmr_key = rank_response.ratings[0].mmr_key
+        # self.mode_key = rank_response.ratings[0].mode_key
+        
         
     @property
     def mmr(self):
