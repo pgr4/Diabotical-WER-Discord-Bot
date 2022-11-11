@@ -38,9 +38,9 @@ class Team:
     @property
     def result_str(self) -> str:
         if self.placement:
-            return 'WIN'
-        else:
             return 'LOSS'
+        else:
+            return 'WIN'
 
     def get_player_rank_data(self) -> list[PlayerRankData]:
         ret = []
