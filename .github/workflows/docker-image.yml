@@ -1,7 +1,7 @@
 name: Docker Image CI
 
 env:
-  TAG: $(date +%s)
+  SECRET: $(date +%s)
 
 on:
   push:
@@ -18,6 +18,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file dockerfile --tag iampgr4/diabotical-wer-discord-bot:${{TAG}}
+      run: docker build . --file dockerfile --tag iampgr4/diabotical-wer-discord-bot:${{env.SECRET}}
     - name: Push the Docker image
-      run: docker push iampgr4/diabotical-wer-discord-bot:${{TAG}}
+      run: docker push iampgr4/diabotical-wer-discord-bot:${{env.SECRET}}
