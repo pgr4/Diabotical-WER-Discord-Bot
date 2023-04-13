@@ -19,3 +19,9 @@ def get_match_from_command(command) -> int:
         return int(cleaned_command)
     except:
         return 0
+    
+def get_player_from_command(command) -> int:
+    try:
+        return clean_command(command)
+    except:
+        return None

@@ -5,8 +5,8 @@ from discord.ext import commands
 from rank import Rank
 from match import Match
 from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response
-from player_db import try_get_player_id, try_remove_player_id, try_add_player
-from discord_formatter import send_in_codeblock, get_match_from_command
+from player_db import try_get_player_id, try_remove_player_id, try_add_player, try_get_all_player_id, try_add_all_player
+from discord_formatter import send_in_codeblock, get_match_from_command, get_player_from_command
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -28,6 +28,7 @@ async def on_get_wer(command):
         return 
     
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    add_all_players(recent_game_response)
     await send_in_codeblock(command, recent_game_response.get_all_players_wer_adjusted_output())
 
 @bot.command(name='match')
@@ -38,6 +39,7 @@ async def on_get_match(command):
         return 
     
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    add_all_players(recent_game_response)
     await send_in_codeblock(command, recent_game_response.get_match_summary_output())
 
 @bot.command(name='mymatch')
@@ -48,7 +50,19 @@ async def on_get_mymatch(command):
         return 
     
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    add_all_players(recent_game_response)
     await send_in_codeblock(command, recent_game_response.get_match_detail_for_player(player_id))
+    
+@bot.command(name='player')
+async def on_get_player_match(command):
+    player_id = try_get_all_player_id(get_player_from_command(command))
+    if player_id is None:
+        await send_in_codeblock(command, f'Player Not Found')
+        return 
+    
+    recent_game_response = Match(get_recent_game_response(player_id, 0))
+    add_all_players(recent_game_response)
+    await send_in_codeblock(command, recent_game_response.get_match_summary_output())
 
 @bot.command(name='carry')
 async def on_get_carry(command):
@@ -58,6 +72,7 @@ async def on_get_carry(command):
         return
     
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    add_all_players(recent_game_response)
     await send_in_codeblock(command, recent_game_response.get_best_player_adjusted_output(player_id))
     
 @bot.command(name='blame')
@@ -68,6 +83,7 @@ async def on_get_carry(command):
         return
     
     recent_game_response = Match(get_recent_game_response(player_id, get_match_from_command(command)))
+    add_all_players(recent_game_response)
     await send_in_codeblock(command, recent_game_response.get_worst_player_adjusted_output(player_id))
 
 @bot.command(name='cool')
@@ -119,10 +135,17 @@ async def on_get_help(command):
 !help           - You know what this does
 !match          - Displays summary stats
 !mymatch        - Displays your full stats of match
+!player         - Displays another player's last match stats
 !register       - Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
 !unregister     - Can remove self to re-add or whatever
 !wer            - Displays the rankings and relative scores""")
-    
+
+def add_all_players(match: Match):
+    for player in match.team_1.players:
+        try_add_all_player(player.name, player.player_id)
+    for player in match.team_2.players:
+        try_add_all_player(player.name, player.player_id)
+
 bot.run(TOKEN)
 
 #    TODO: ALL WER/RATINGS
