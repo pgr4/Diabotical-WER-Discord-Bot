@@ -1,5 +1,8 @@
 name: Docker Image CI
 
+env:
+  TAG: $(date +%s)
+
 on:
   push:
     branches: [ "main" ]
@@ -8,13 +11,13 @@ on:
 
 jobs:
 
-  build:
+  publish:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file dockerfile --tag iampgr4/diabotical-wer-discord-bot:$(date +%s)
-    - name: Build the Docker image
-      run: docker push iampgr4/diabotical-wer-discord-bot:$(date +%s)
+      run: docker build . --file dockerfile --tag iampgr4/diabotical-wer-discord-bot:${{TAG}}
+    - name: Push the Docker image
+      run: docker push iampgr4/diabotical-wer-discord-bot:${{TAG}}
