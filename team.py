@@ -8,7 +8,7 @@ class Team:
     def __init__(self, team, clients):
         self.score = int(team.score)
         self.name = str(team.name)
-        self.placement = bool(team.placement)
+        self.won = team.placement == 0
         self.players: list[Player] = []
         for client in clients:
             self.players.append(Player(client))
@@ -36,11 +36,13 @@ class Team:
         return sum(map(lambda t: t.total_heal, self.players))
     
     @property
+    
+    @property
     def result_str(self) -> str:
-        if self.placement:
-            return 'LOSS'
-        else:
+        if self.won:
             return 'WIN'
+        else:
+            return 'LOSS'
 
     def get_player_rank_data(self) -> list[PlayerRankData]:
         ret = []

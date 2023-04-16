@@ -4,9 +4,13 @@ from dotenv import load_dotenv
 from discord.ext import commands
 from rank import Rank
 from match import Match
-from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response
+from match_summary import MatchSummary
+from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response, get_all_recent_games_response, get_match_response
 from player_db import try_get_player_id, try_remove_player_id, try_add_player, try_get_all_player_id, try_add_all_player
 from discord_formatter import send_in_codeblock, get_match_from_command, get_player_from_command
+import time
+
+from team import Team
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -103,7 +107,63 @@ async def on_get_rank(command):
         return
     
     await send_in_codeblock(command, Rank(get_rank_response(player_id)).get_output())
+
+@bot.command(name='recent')
+async def get_recent_data(command):
+    player_id = try_get_player_id(command.author)
+    if player_id is None:
+        await send_in_codeblock(command, f'Not Registered')
+        return
+    
+    match_summaries: list[MatchSummary] = []
+    for match_id in get_all_recent_games_response(player_id):
+        match = Match(get_match_response(match_id))
+        team: Team = match.get_team_for_player(player_id)
+        list_player_rank_data = team.get_player_rank_data()
         
+        is_win = team.won
+        match_summary = MatchSummary(is_win, list(filter(lambda t: t.player_id == player_id, list_player_rank_data))[0], list(filter(lambda t: t.player_id != player_id, list_player_rank_data)))
+        match_summaries.append(match_summary)
+        time.sleep(1)
+    
+    match_summary_wins = list(filter(lambda t: t.is_win == True, match_summaries))
+    match_summary_losses = list(filter(lambda t: t.is_win == False, match_summaries))
+    
+    # WER +/- Per Win
+    wer_plus_minus_per_win = sum(map(lambda t: t.plus_minus, match_summary_wins)) / len(match_summary_wins)
+    # WER +/- Per Loss
+    wer_plus_minus_per_loss = sum(map(lambda t: t.plus_minus, match_summary_losses)) / len(match_summary_losses)
+    # WER Average Per Win
+    wer_average_per_win = sum(map(lambda t: t.wer, match_summary_wins)) / len(match_summary_wins)
+    # WER Average Per Loss
+    wer_average_per_loss = sum(map(lambda t: t.wer, match_summary_losses)) / len(match_summary_losses)
+    # WER Best
+    wer_best = sorted(match_summaries, key=lambda t: t.wer, reverse=True)[0].wer
+    # WER Worst
+    wer_worst = sorted(match_summaries, key=lambda t: t.wer, reverse=False)[0].wer
+    # WER +/- Best
+    wer_plus_minus_best = sorted(match_summaries, key=lambda t: t.plus_minus, reverse=True)[0].plus_minus
+    # WER +/- Worst
+    wer_plus_minus_worst = sorted(match_summaries, key=lambda t: t.plus_minus, reverse=False)[0].plus_minus
+    # WER +/- Lopsided W
+    wer_plus_minus_lop_w = sorted(match_summary_wins, key=lambda t: t.plus_minus, reverse=False)[0].plus_minus
+    # WER +/- Lopsided L
+    wer_plus_minus_lop_l = sorted(match_summary_losses, key=lambda t: t.plus_minus, reverse=True)[0].plus_minus
+    
+    await send_in_codeblock(command, f'''
+W/L:                    {len(match_summary_wins)} / {len(match_summary_losses)}
+WER +/- Per Win:        {round(wer_plus_minus_per_win, 1)}
+WER +/- Per Loss:       {round(wer_plus_minus_per_loss, 1)}
+WER Average Per Win:    {round(wer_average_per_win, 1)}
+WER Average Per Loss:   {round(wer_average_per_loss, 1)}
+WER Best:               {round(wer_best, 1)}
+WER Worst:              {round(wer_worst, 1)}
+WER +/- Best:           {round(wer_plus_minus_best, 1)}
+WER +/- Worst:          {round(wer_plus_minus_worst, 1)}
+WER +/- Lopsided W:     {round(wer_plus_minus_lop_w, 1)}
+WER +/- Lopsided L:     {round(wer_plus_minus_lop_l, 1)}
+''')
+  
 @bot.command(name='unregister')
 async def on_unregister(command):
     if try_get_player_id(command.author) is None:

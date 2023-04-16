@@ -24,3 +24,6 @@ def get_recent_game_response(player_id, match) -> any:
 def get_recent_game_diaboticool_url(player_id, match) -> any:
     response = makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}')
     return f'https://diabotical.cool/match/{response.matches.matches[match].match_id}'
+
+def get_all_recent_games_response(player_id) -> any:
+    return list(map(lambda t: t.match_id, list(filter(lambda t: t.match_mode == 'wipeout', makeGetRequest(f'https://diabotical.cool/api/v1/player/{player_id}').matches.matches))))
