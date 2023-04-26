@@ -36,8 +36,6 @@ class Team:
         return sum(map(lambda t: t.total_heal, self.players))
     
     @property
-    
-    @property
     def result_str(self) -> str:
         if self.won:
             return 'WIN'
