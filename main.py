@@ -115,6 +115,13 @@ async def get_recent_data(command):
         await send_in_codeblock(command, f'Not Registered')
         return
     
+    match_count = get_match_from_command(command)
+    
+    limit = 10
+    if match_count == 0:
+        limit = match_count
+    
+    count = 0
     match_summaries: list[MatchSummary] = []
     for match_id in get_all_recent_games_response(player_id):
         match = Match(get_match_response(match_id))
@@ -125,6 +132,11 @@ async def get_recent_data(command):
         match_summary = MatchSummary(is_win, list(filter(lambda t: t.player_id == player_id, list_player_rank_data))[0], list(filter(lambda t: t.player_id != player_id, list_player_rank_data)))
         match_summaries.append(match_summary)
         time.sleep(1)
+        
+        count = count + 1
+        if count == limit:
+            break
+        
     
     match_summary_wins = list(filter(lambda t: t.is_win == True, match_summaries))
     match_summary_losses = list(filter(lambda t: t.is_win == False, match_summaries))
