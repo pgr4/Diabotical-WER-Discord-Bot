@@ -65,14 +65,14 @@ def try_get_all_player_id(player) -> str:
             pass
     
 
-def try_add_all_player(player, id) -> bool:
+def try_add_all_player(player_name: str, id: str) -> bool:
     try:
-        if try_get_all_player_id(player) is not None:
+        if try_get_all_player_id(id) is not None:
             return False
         
         with open(all_players_file_name, 'a') as f:
             f.write()
-            f.writelines(get_line_output(player, id))
+            f.writelines(get_line_output(player_name, id))
             
         return True
     except:
