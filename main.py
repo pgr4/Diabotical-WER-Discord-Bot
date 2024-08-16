@@ -5,7 +5,7 @@ from discord.ext import commands
 from rank import Rank
 from match import Match
 from match_summary import MatchSummary
-from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response, get_all_recent_games_response, get_match_response
+from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response, get_all_recent_games_response, get_match_response, get_current_games
 from player_db import try_get_player_id, try_remove_player_id, try_add_player, try_get_all_player_id, try_add_all_player
 from discord_formatter import send_in_codeblock, get_match_from_command, get_player_from_command
 import time
@@ -198,6 +198,60 @@ async def on_unregister(command):
     else:
         await send_in_codeblock(command, 'Failed to Register')    
 
+@bot.command(name='status')
+async def on_status(command):
+    data = get_current_games()
+
+    warmups = list(filter(lambda t: t.state == 1, data.customs))
+    actives = list(filter(lambda t: t.state == 2, data.customs))
+
+    others = list(filter(lambda t: t.state != 1 and t.state != 2, data.customs))
+
+    if len(others) > 0:
+        pass
+
+    hasWarmups = len(warmups) > 0
+    hasActives = len(actives) > 0
+    hasPickups = len(data.pickups) > 0
+
+    strs = []
+
+    if not hasWarmups and not hasActives and not hasPickups:
+        await send_in_codeblock(command, 'No players online')
+        return
+
+    if hasActives:
+        strs.append('-----------------------------Active----------------------------- \n')
+
+        for game in actives:
+            strs += getGameStrings(game)
+
+    if hasWarmups:
+        strs.append('-----------------------------Warmups----------------------------- \n')
+
+        for game in warmups:
+            strs += getGameStrings(game)
+
+    if hasPickups:
+        strs.append('-----------------------------Pickups----------------------------- \n')
+
+        for pickup in data.pickups:
+            strs.append(f'Mode: {pickup.mode.upper()}')
+            strs.append(f'{len(pickup.users)} / {pickup.team_size * pickup.team_count}')
+            strs.append(f'Players: {', '.join(map(lambda t: t.name, pickup.users))}')
+            strs.append(f'\n')
+
+    await send_in_codeblock(command, ' \n'.join(strs))
+
+def getGameStrings(game):
+    strs = []
+    strs.append(f'Mode: {game.mode.upper()} Map: {game.map.upper()}')
+    for team_id in list(set((map(lambda t: t.team_id, game.clients)))):
+        strs.append(f'Team {team_id}: {', '.join(map(lambda t: t.name, filter(lambda t: t.team_id == team_id, game.clients)))}')
+    strs.append(f'Score: {' - '.join(map(lambda t: f'{game.team_scores.__dict__[t]}', game.team_scores.__dict__.keys()))}')
+    strs.append(f'\n')
+    return strs
+
 @bot.command(name='help')
 async def on_get_help(command):
     await send_in_codeblock(command, f"""-----------------------------o_HOTHEAD_o's Diabotical Help Menu-----------------------------
@@ -209,6 +263,7 @@ async def on_get_help(command):
 !mymatch        - Displays your full stats of match
 !player         - Displays another player's last match stats
 !register       - Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
+!status         - Displays the current server status
 !unregister     - Can remove self to re-add or whatever
 !wer            - Displays the rankings and relative scores""")
 

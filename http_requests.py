@@ -10,7 +10,7 @@ def makeGetRequest(url) -> any:
 
 def get_current_games():
     response = makeGetRequest(f'https://diabotical.cool/api/v1/servers/')
-    return response.data.data.customs
+    return response.data.data
 
 def get_rank_response(player_id) -> any:
     return makeGetRequest(f'https://api.diabotical.com/api/v0/diabotical/users/{player_id}/rating')
