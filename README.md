@@ -6,9 +6,11 @@ Utilizes [Diabotical.cool](diabotical.cool) and api.diabotical.com.
 
 ### !blame          
 Displays the stats of the 'packetdog' on your team
+<img src="https://i.imgur.com/mph4Zna.png">
 
 ### !carry          
 Displays the stats of the player that carried
+<img src="https://i.imgur.com/ato5iE1.png">
 
 ### !cool
 Gets the Diabotical.cool link
@@ -18,6 +20,7 @@ Displays all available commands
 
 ### !match
 Displays summary stats
+<img src="https://i.imgur.com/WWWFCoX.png">
 
 ### !mymatch
 Displays your full stats of match
@@ -30,19 +33,11 @@ Register using your player id (Can obtain through Diabotical.cool site). Place y
 
 ### !status
 Displays the current server status
+<img src="https://i.imgur.com/L04mddm.png">
 
 ### !unregister
 Can remove self to re-add or whatever
 
 ### !wer
 Displays the rankings and relative scores
-
-[WER](https://imgur.com/tNvkfLI)
-
-[Status](https://imgur.com/L04mddm)
-
-[Match](https://imgur.com/WWWFCoX)
-
-[Carry](https://imgur.com/ato5iE1)
-
-[Blame](https://imgur.com/mph4Zna)
+<img src="https://i.imgur.com/tNvkfLI.png">
