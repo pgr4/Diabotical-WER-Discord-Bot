@@ -33,7 +33,7 @@ Register using your player id (Can obtain through Diabotical.cool site). Place y
 
 ### !status
 Displays the current server status
-<img src="https://i.imgur.com/9M5W0YR.png">
+<img src="https://i.imgur.com/1SMejNh.png">
 
 ### !unregister
 Can remove self to re-add or whatever
