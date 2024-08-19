@@ -15,6 +15,12 @@ Displays the stats of the player that carried
 ### !cool
 Gets the Diabotical.cool link
 
+### !dequeue
+Dequeues player from Queue
+
+### !enqueue
+Queues for the next n Hours ex: "!enqueue 5"
+
 ### !help
 Displays all available commands
 
@@ -27,6 +33,9 @@ Displays your full stats of match
 
 ### !player
 Displays another player's last match stats
+
+### !queue
+Gets the Queue Status for the next n Hours ex: "!queue 5"
 
 ### !register
 Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"

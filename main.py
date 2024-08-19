@@ -7,6 +7,7 @@ from match import Match
 from match_summary import MatchSummary
 from http_requests import get_recent_game_response, get_recent_game_diaboticool_url, get_rank_response, get_all_recent_games_response, get_match_response, get_current_games
 from player_db import try_get_player_id, try_remove_player_id, try_add_player, try_get_all_player_id, try_add_all_player
+from queue_db import add_to_queue, get_queue_status, remove_from_queue
 from discord_formatter import send_in_codeblock, get_match_from_command, get_player_from_command
 import time
 
@@ -258,14 +259,42 @@ async def on_get_help(command):
 !blame          - Displays the stats of the 'packetdog' on your team
 !carry          - Displays the stats of the player that carried
 !cool           - Gets the Diabotical.cool link
+!dequeue        - Dequeues player from Queue
+!enqueue        - Queues for the next n Hours ex: "!enqueue 5"
 !help           - You know what this does
 !match          - Displays summary stats
 !mymatch        - Displays your full stats of match
 !player         - Displays another player's last match stats
+!queue          - Gets the Queue Status for the next n Hours ex: "!queue 5"
 !register       - Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
 !status         - Displays the current server status
 !unregister     - Can remove self to re-add or whatever
 !wer            - Displays the rankings and relative scores""")
+
+@bot.command(name='enqueue')
+async def on_enqueue(command):
+    hours = get_match_from_command(command)
+    if hours == 0:
+        hours = 1
+    add_to_queue(command.author, hours)
+
+    queueStatus = get_queue_status(hours)
+
+    await send_in_codeblock(command, str(queueStatus))
+
+@bot.command(name='queue')
+async def on_queue(command):
+    hours = get_match_from_command(command)
+    if hours == 0:
+        hours = 1
+    queueStatus = get_queue_status(hours)
+
+    await send_in_codeblock(command, str(queueStatus))
+
+@bot.command(name='dequeue')
+async def on_queue(command):
+    remove_from_queue(command.author)
+    await send_in_codeblock(command, f'Removed {command.author} from Queue')
 
 def add_all_players(match: Match):
     for player in match.team_1.players:

@@ -152,4 +152,5 @@ cython_debug/
 #.idea/
 .vscode/launch.json
 players.csv
+queue.csv
 dockerfile
