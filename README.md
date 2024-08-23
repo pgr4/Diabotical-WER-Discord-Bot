@@ -1,6 +1,6 @@
 # Diabotical WER Discord Bot
 
-Utilizes [Diabotical.cool](diabotical.cool) and api.diabotical.com.
+Utilizes [Diabotical.cool](https://diabotical.cool) and api.diabotical.com.
 
 ## Functions
 
