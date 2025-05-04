@@ -248,7 +248,7 @@ def getGameStrings(game):
     strs = []
     strs.append(f'Mode: {game.mode.upper()} Map: {game.map.upper()}')
     for team_id in list(set((map(lambda t: t.team_id, game.clients)))):
-        strs.append(f'Team {team_id}: {', '.join(map(lambda t: t.name, filter(lambda t: t.team_id == team_id, game.clients)))}')
+        strs.append(f"Team {team_id}: {', '.join(map(lambda t: t.name, filter(lambda t: t.team_id == team_id, game.clients)))}")
     strs.append(f'Score: {' - '.join(map(lambda t: f'{game.team_scores.__dict__[t]}', game.team_scores.__dict__.keys()))}')
     strs.append(f'\n')
     return strs
