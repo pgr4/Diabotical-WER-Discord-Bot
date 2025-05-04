@@ -189,7 +189,7 @@ async def on_unregister(command):
         await send_in_codeblock(command, f'Failed to Unregister')
         
 @bot.command(name='register')
-async def on_unregister(command):
+async def on_register(command):
     if try_get_player_id(command.author):
         await send_in_codeblock(command, f'Already Registered')
         return
@@ -239,7 +239,7 @@ async def on_status(command):
         for pickup in data.pickups:
             strs.append(f'Mode: {pickup.mode.upper()}')
             strs.append(f'{len(pickup.users)} / {pickup.team_size * pickup.team_count}')
-            strs.append(f'Players: {', '.join(map(lambda t: t.name, pickup.users))}')
+            strs.append(f"Players: {', '.join(map(lambda t: t.name, pickup.users))}")
             strs.append(f'\n')
 
     await send_in_codeblock(command, ' \n'.join(strs))
