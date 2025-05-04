@@ -20,6 +20,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
     - name: Build the Docker image
-      run: docker build . --file dockerfile --tag iampgr4/diabotical-wer-discord-bot:latest # $(date +%s)
+      run: docker build . --file dockerfile --build-arg DISCORD_TOKEN=${{ secrets.DISCORD_TOKEN }} --tag iampgr4/diabotical-wer-discord-bot:latest # $(date +%s)
     - name: Push the Docker image
       run: docker push iampgr4/diabotical-wer-discord-bot:latest
