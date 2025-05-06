@@ -72,7 +72,7 @@ def try_add_all_player(player_name: str, id: str) -> bool:
         if not os.path.exists(all_players_file_name):
             open(all_players_file_name, 'w').close()
         
-        if try_get_all_player_id(id) is not None:
+        if try_get_all_player_id(player_name) is not None:
             return False
         
         with open(all_players_file_name, 'a') as f:
