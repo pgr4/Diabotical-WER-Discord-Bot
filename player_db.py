@@ -1,3 +1,5 @@
+import os
+
 players_file_name = 'players.csv'
 all_players_file_name = 'all_players.csv'
 
@@ -67,11 +69,13 @@ def try_get_all_player_id(player) -> str:
 
 def try_add_all_player(player_name: str, id: str) -> bool:
     try:
+        if not os.path.exists(all_players_file_name):
+            open(all_players_file_name, 'w').close()
+        
         if try_get_all_player_id(id) is not None:
             return False
         
         with open(all_players_file_name, 'a') as f:
-            f.write()
             f.writelines(get_line_output(player_name, id))
             
         return True
