@@ -34,8 +34,8 @@ Displays your full stats of match
 ### !player
 Displays another player's last match stats
 
-### !queue
-Gets the Queue Status for the next n Hours ex: "!queue 5"
+### !queuestatus
+Gets the current queue status
 
 ### !register
 Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
