@@ -265,7 +265,7 @@ async def on_get_help(command):
 !match          - Displays summary stats
 !mymatch        - Displays your full stats of match
 !player         - Displays another player's last match stats
-!queue          - Gets the Queue Status for the next n Hours ex: "!queue 5"
+!queuestatus    - Gets the current queue status
 !register       - Register using your player id (Can obtain through Diabotical.cool site). Place your id after register ex: "!register c9a979c899d64c6cb7bdd2dc3d815a04"
 !status         - Displays the current server status
 !unregister     - Can remove self to re-add or whatever
@@ -278,16 +278,13 @@ async def on_enqueue(command):
         hours = 1
     add_to_queue(command.author, hours)
 
-    queueStatus = get_queue_status(hours)
+    queueStatus = get_queue_status()
 
     await send_in_codeblock(command, str(queueStatus))
 
-@bot.command(name='queue')
+@bot.command(name='queuestatus')
 async def on_queue(command):
-    hours = get_match_from_command(command)
-    if hours == 0:
-        hours = 1
-    queueStatus = get_queue_status(hours)
+    queueStatus = get_queue_status()
 
     await send_in_codeblock(command, str(queueStatus))
 

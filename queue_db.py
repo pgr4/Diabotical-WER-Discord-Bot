@@ -3,9 +3,8 @@ from datetime import datetime, timedelta
 queue_file_name = 'queue.csv'
 
 class QueueStatus:
-    def __init__(self, hours):
+    def __init__(self):
         self.players = []
-        self.hours = hours
 
     def add(self, player):
         self.players.append(player)
@@ -14,7 +13,7 @@ class QueueStatus:
         return len(self.players)
     
     def __str__(self):
-        return f"{self.count()} Players in Queue for next {self.hours} hours {', '.join(self.players)}"
+        return f"{self.count()} Players in Queue right now {', '.join(self.players)}"
 
 def try_remove_player_id(author) -> bool:
     try:
@@ -51,17 +50,14 @@ def remove_from_queue(author) -> bool:
     try_remove_player_id(author)
     return True
 
-def get_queue_status(hours) -> QueueStatus:
-    ret = QueueStatus(hours)
+def get_queue_status() -> QueueStatus:
+    ret = QueueStatus()
     current = datetime.now()
-    # future = current + timedelta(hours=hours)
     for line in open(queue_file_name, 'r').readlines():
         # 0: player
         # 1: init time
         # 2: end time
         split_lines = line.split(',')
-        if current >= datetime.strptime(split_lines[1], '%Y-%m-%d %H:%M:%S.%f'):
-        # Guess we do not care about the future time for right now 
-        # if current >= datetime.strptime(split_lines[1], '%Y-%m-%d %H:%M:%S.%f') and datetime.strptime(split_lines[2].strip('\n'), '%Y-%m-%d %H:%M:%S.%f') >= future:
+        if current >= datetime.strptime(split_lines[1], '%Y-%m-%d %H:%M:%S.%f') and current <= datetime.strptime(split_lines[2].strip('\n'), '%Y-%m-%d %H:%M:%S.%f'):
             ret.add(split_lines[0])
     return ret
